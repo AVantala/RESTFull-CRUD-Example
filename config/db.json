@@ -1,0 +1,11 @@
+{
+    "INDX": {
+      "host": "host url",
+      "port": "5432",
+      "database": "database name",
+      "user": "user name",
+      "password": "password",
+      "max": "10",
+      "idleTimeoutMillis": "30000"
+    }
+}  
