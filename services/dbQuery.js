@@ -46,14 +46,21 @@ function select (qry, dbName) {
       client.query(qry)
         .then(res => {
           client.release()
-          deferred.resolve(res.rows)
+          if (res.rowCount > 0) {
+            deferred.resolve(res.rows)
+          } else {
+            deferred.reject({
+              code: 200,
+              error: 'no rows affected'
+            })
+          }
         })
         .catch(e => {
           client.release()
           console.error('query error in', e.message, e.stack)
           deferred.reject({
             code: 200,
-            error: 'Internal Structure Error'
+            error: e.message
           })
         })
     }).catch(e => {

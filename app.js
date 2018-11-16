@@ -51,6 +51,18 @@ app.get(BASE_URL + '/auth', isAuthorized, (req, res) => {
   res.status(200).send('Authorized successful')
 })
 
+// user insert
+app.post(BASE_URL + '/user', isAuthorized, require('./api/controllers/user/user').userInsert)
+
+// user list
+app.get(BASE_URL + '/users', isAuthorized, require('./api/controllers/user/user').userList)
+
+// user update
+app.put(BASE_URL + '/user/:user_id', isAuthorized, require('./api/controllers/user/user').userUpdate)
+
+// user delete
+app.delete(BASE_URL + '/user/:user_id', isAuthorized, require('./api/controllers/user/user').userDelete)
+
 /* Error occured */
 app.use(function (err, req, res, next) {
   console.log('-----Something broke!---', err)
@@ -71,8 +83,8 @@ server.timeout = 600000
 console.log('API is running on port ' + port)
 console.log('try this:\ncurl http://localhost:' + port + BASE_URL + '/ping')
 
-// process.on('uncaughtException', function (err) {
-//   console.log('-----uncaughtException----- ', err)
-// })
+process.on('uncaughtException', function (err) {
+  console.log('-----uncaughtException----- ', err)
+})
 
 module.exports = { app }
