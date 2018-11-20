@@ -61,7 +61,7 @@ module.exports = {
      and (u.username = ${data.username} or ${data.username} is null)
      and (o.organization_name = ${data.organization_name} or ${data.organization_name} is null)
      and (uom.user_organization_role = ${data.user_organization_role} or ${data.user_organization_role} is null)
-     order by u.first_name ${data.order} 
+     order by ${data.column_name}  ${data.order} 
      offset ${data.page_index}
      limit ${data.page_size}`
   }

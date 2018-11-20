@@ -13,7 +13,7 @@ function report (req, res) {
     if (val === '') {
       return null
     } else {
-      if (typeof (val) === 'number' || key === 'order') {
+      if (typeof (val) === 'number' || key === 'order' || key === 'column_name') {
         return val
       } else {
         return `'${val}'`
@@ -23,6 +23,7 @@ function report (req, res) {
 
   jsonValidation.readValidation(data)
     .then(() => {
+      data.column_name = !data.column_name ? 'u.first_name' : (data.column_name === 'organization_name' ? 'o.' + data.column_name : (data.column_name === 'user_organization_role' ? 'uom.' + data.column_name : 'u.' + data.column_name))
       let queryString = queries.userOrgReport(data)
 
       operation.readOperation(queryString)
