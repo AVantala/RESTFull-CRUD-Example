@@ -51,7 +51,8 @@ function select (qry, dbName) {
           } else {
             deferred.reject({
               code: 200,
-              error: 'no rows affected'
+              error: 'no rows affected',
+              data: res.rows
             })
           }
         })

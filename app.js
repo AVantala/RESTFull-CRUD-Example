@@ -51,17 +51,32 @@ app.get(BASE_URL + '/auth', isAuthorized, (req, res) => {
   res.status(200).send('Authorized successful')
 })
 
-// user insert
-app.post(BASE_URL + '/user', isAuthorized, require('./api/controllers/user/user').userInsert)
+// user create
+app.post(BASE_URL + '/user', isAuthorized, require('./api/controllers/user/user').insert)
 
-// user list
-app.get(BASE_URL + '/users', isAuthorized, require('./api/controllers/user/user').userList)
+// user read
+app.get(BASE_URL + '/users', isAuthorized, require('./api/controllers/user/user').read)
 
 // user update
-app.put(BASE_URL + '/user/:user_id', isAuthorized, require('./api/controllers/user/user').userUpdate)
+app.put(BASE_URL + '/user/:user_id', isAuthorized, require('./api/controllers/user/user').update)
 
 // user delete
 app.delete(BASE_URL + '/user/:user_id', isAuthorized, require('./api/controllers/user/user').userDelete)
+
+// organization create
+app.post(BASE_URL + '/organization', isAuthorized, require('./api/controllers/organization/organization').insert)
+
+// organization read
+app.get(BASE_URL + '/organizations', isAuthorized, require('./api/controllers/organization/organization').read)
+
+// user organization mapping
+app.post(BASE_URL + '/userOrganizationMap', isAuthorized, require('./api/controllers/userOrganization/userOrganization').insert)
+
+// user organization mapping list
+app.get(BASE_URL + '/userOrganizationMappingList', isAuthorized, require('./api/controllers/userOrganization/userOrganization').read)
+
+// user organization report
+app.get(BASE_URL + '/userOrgReport', isAuthorized, require('./api/controllers/reports/userOrgReport').report)
 
 /* Error occured */
 app.use(function (err, req, res, next) {
