@@ -46,6 +46,7 @@ function createUpdateValidation (data) {
         'type': 'string',
         'title': 'The Username Schema',
         'default': '',
+        'format': 'email',
         'pattern': '^(.*)$'
       }
     }
