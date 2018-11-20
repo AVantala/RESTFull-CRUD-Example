@@ -1,124 +1,58 @@
-let q = require('q')
 let queries = require('../../../services/queryFile')
-let dbQuery = require('../../../services/dbQuery')
-let dbName = 'INDX'
+let operation = require('../../../services/queries')
 
-function insert (data) {
-  let deferred = q.defer()
+function insert (req, res) {
+  let data = req.body
 
   let queryString = queries.userInsert(data)
-  dbQuery.select(queryString, dbName)
+
+  operation.createOperation(queryString)
     .then((response) => {
-      deferred.resolve({
-        status: 'success',
-        message: 'User Inser Successfully.'
-        // data: response[0]
-      })
+      if (response.status === 'success') {
+        response['message'] = 'User Create Successfully.'
+        res.status(200).send(response)
+      } else {
+        console.log('error in response')
+      }
     })
     .catch((error) => {
-      deferred.reject({
-        status: 'failed',
-        error: error
-      })
+      res.status(200).send(error)
     })
+    .done()
+};
 
-  return deferred.promise
-}
-
-function list () {
-  let deferred = q.defer()
-
+function read (req, res) {
   let queryString = queries.userList()
-  dbQuery.select(queryString, dbName)
+
+  operation.readOperation(queryString)
     .then((response) => {
-      deferred.resolve({
-        status: 'success',
-        message: 'User List Fetch Successfully.',
-        data: response
-      })
+      if (response.status === 'success') {
+        response['message'] = 'User List Fetch Successfully.'
+        res.status(200).send(response)
+      } else {
+        console.log('error in response')
+      }
     })
     .catch((error) => {
-      deferred.reject({
-        status: 'failed',
-        error: error
-      })
+      res.status(200).send(error)
     })
+    .done()
+};
 
-  return deferred.promise
-}
-
-function update (data, userId) {
-  let deferred = q.defer()
+function update (req, res) {
+  let userId = req.params.user_id
+  let data = req.body
 
   let queryString = queries.userUpdate(data, userId)
-  console.log(queryString)
-  dbQuery.select(queryString, dbName)
+
+  operation.updateOperation(queryString)
     .then((response) => {
-      deferred.resolve({
-        status: 'success',
-        message: 'User Details Update Successfully.',
-        data: response
-      })
-    })
-    .catch((error) => {
-      deferred.reject({
-        status: 'failed',
-        error: error
-      })
-    })
-
-  return deferred.promise
-}
-
-function deleteUser (userId) {
-  let deferred = q.defer()
-
-  let queryString = queries.userDelete(userId)
-  dbQuery.select(queryString, dbName)
-    .then((response) => {
-      deferred.resolve({
-        status: 'success',
-        message: 'User Delete Successfully.',
-        data: response
-      })
-    })
-    .catch((error) => {
-      deferred.reject({
-        status: 'failed',
-        error: error
-      })
-    })
-
-  return deferred.promise
-}
-
-function userInsert (req, res) {
-  insert(req.body)
-    .then((response) => {
-      res.status(200).send(response)
-    })
-    .catch((error) => {
-      res.status(200).send(error)
-    })
-    .done()
-};
-
-function userList (req, res) {
-  list()
-    .then((response) => {
-      res.status(200).send(response)
-    })
-    .catch((error) => {
-      res.status(200).send(error)
-    })
-    .done()
-};
-
-function userUpdate (req, res) {
-  let userId = req.params.user_id
-  update(req.body, userId)
-    .then((response) => {
-      res.status(200).send(response)
+      if (response.status === 'success') {
+        response['message'] = 'User Update Successfully.'
+        res.status(200).send(response)
+      } else {
+        console.log('error in response')
+      }
     })
     .catch((error) => {
       res.status(200).send(error)
@@ -128,9 +62,16 @@ function userUpdate (req, res) {
 
 function userDelete (req, res) {
   let userId = req.params.user_id
-  deleteUser(userId)
+  let queryString = queries.userDelete(userId)
+
+  operation.deleteOperation(queryString)
     .then((response) => {
-      res.status(200).send(response)
+      if (response.status === 'success') {
+        response['message'] = 'User Delete Successfully.'
+        res.status(200).send(response)
+      } else {
+        console.log('error in response')
+      }
     })
     .catch((error) => {
       res.status(200).send(error)
@@ -139,5 +80,5 @@ function userDelete (req, res) {
 };
 
 module.exports = {
-  userInsert, userList, userUpdate, userDelete
+  insert, read, update, userDelete
 }
