@@ -1,7 +1,9 @@
-let q = require('q')
-let _ = require('underscore')
-let pg = require('pg')
-let config = require('../config/db.json')
+'use strict'
+
+const q = require('q')
+const _ = require('underscore')
+const pg = require('pg')
+const config = require('../config/db.json')
 let pool = {}
 
 // creating new pool

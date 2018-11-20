@@ -1,3 +1,5 @@
+'use strict'
+
 const q = require('q')
 const dbQuery = require('./dbQuery')
 const dbName = 'INDX'

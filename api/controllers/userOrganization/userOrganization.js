@@ -1,24 +1,34 @@
-let queries = require('../../../services/queryFile')
-let operation = require('../../../services/queries')
+'use strict'
+
+const queries = require('../../../services/queryFile')
+const operation = require('../../../services/queries')
+
+let jsonValidation = require('./validation')
 
 function insert (req, res) {
   let data = req.body
 
-  let queryString = queries.userOrgInsert(data)
+  jsonValidation.createValidation(data)
+    .then(() => {
+      let queryString = queries.userOrgInsert(data)
 
-  operation.createOperation(queryString)
-    .then((response) => {
-      if (response.status === 'success') {
-        response['message'] = 'User Organization Maped Successfully.'
-        res.status(200).send(response)
-      } else {
-        console.log('error in response')
-      }
+      operation.createOperation(queryString)
+        .then((response) => {
+          if (response.status === 'success') {
+            response['message'] = 'User Organization Maped Successfully.'
+            res.status(200).send(response)
+          } else {
+            console.log('error in response')
+          }
+        })
+        .catch((error) => {
+          res.status(200).send(error)
+        })
+        .done()
     })
     .catch((error) => {
       res.status(200).send(error)
     })
-    .done()
 };
 
 function read (req, res) {
@@ -42,4 +52,3 @@ function read (req, res) {
 module.exports = {
   insert, read
 }
-

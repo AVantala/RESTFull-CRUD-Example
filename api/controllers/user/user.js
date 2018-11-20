@@ -1,24 +1,37 @@
-let queries = require('../../../services/queryFile')
-let operation = require('../../../services/queries')
+'use strict'
+
+const queries = require('../../../services/queryFile')
+const operation = require('../../../services/queries')
+
+let jsonValidation = require('./validation')
 
 function insert (req, res) {
   let data = req.body
 
-  let queryString = queries.userInsert(data)
+  jsonValidation.createUpdateValidation(data)
+    .then((jsonRes) => {
+      return jsonRes
+    })
+    .then((jsonRes) => {
+      let queryString = queries.userInsert(jsonRes)
 
-  operation.createOperation(queryString)
-    .then((response) => {
-      if (response.status === 'success') {
-        response['message'] = 'User Create Successfully.'
-        res.status(200).send(response)
-      } else {
-        console.log('error in response')
-      }
+      operation.createOperation(queryString)
+        .then((response) => {
+          if (response.status === 'success') {
+            response['message'] = 'User Create Successfully.'
+            res.status(200).send(response)
+          } else {
+            console.log('error in response')
+          }
+        })
+        .catch((error) => {
+          res.status(200).send(error)
+        })
+        .done()
     })
     .catch((error) => {
       res.status(200).send(error)
     })
-    .done()
 };
 
 function read (req, res) {
@@ -43,21 +56,27 @@ function update (req, res) {
   let userId = req.params.user_id
   let data = req.body
 
-  let queryString = queries.userUpdate(data, userId)
+  jsonValidation.createUpdateValidation(data)
+    .then(() => {
+      let queryString = queries.userUpdate(data, userId)
 
-  operation.updateOperation(queryString)
-    .then((response) => {
-      if (response.status === 'success') {
-        response['message'] = 'User Update Successfully.'
-        res.status(200).send(response)
-      } else {
-        console.log('error in response')
-      }
+      operation.updateOperation(queryString)
+        .then((response) => {
+          if (response.status === 'success') {
+            response['message'] = 'User Update Successfully.'
+            res.status(200).send(response)
+          } else {
+            console.log('error in response')
+          }
+        })
+        .catch((error) => {
+          res.status(200).send(error)
+        })
+        .done()
     })
     .catch((error) => {
       res.status(200).send(error)
     })
-    .done()
 };
 
 function userDelete (req, res) {
