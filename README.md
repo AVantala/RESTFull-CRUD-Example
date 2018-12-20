@@ -4,7 +4,7 @@ This is a Rest Api solution using basic database create, read, update and delete
 Also support for search, sort and pagination.
 
 ## Installation
-- Clone the repo: git clone `https://github.com/AVantala/indx-test`
+- Clone the repo: git clone `https://github.com/AVantala/RESTFull-CRUD-Example.git`
 - Install dependencies: `npm install`
 - Start the server: `npm start or node app.js`
 
